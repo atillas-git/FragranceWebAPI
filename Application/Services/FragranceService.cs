@@ -71,5 +71,6 @@ namespace Application.Services
             var fragranceDtos = _mapper.Map<IEnumerable<FragranceDto>>(fragrances);
 
             return fragranceDtos;
+        }
     }
 }
