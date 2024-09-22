@@ -11,9 +11,9 @@ namespace Domain.Entities
     {
         public int Id { get; set; }
         public string Email { get; set; }
-        public int PasswordHash { get; set; }
-
-        // Additional properties like PasswordHash, Email, etc.
+        public string PasswordHash { get; set; }
+        public string Role { get; set; }
+        public string Name { get; set; }
 
         // Navigation properties
         public ICollection<Rating> Ratings { get; set; }

@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class Creator
+    public class Brand
     {
         public int Id { get; set; }
         public string Name { get; set; }
-
-        // Navigation property
-        public ICollection<FragranceCreator> FragranceCreators { get; set; }
+        public string Country { get; set; }
+        public string WebsiteUrl { get; set; }
+        public string Description { get; set; }
+        public ICollection<Fragrance> Fragrances { get; set; }
         public ICollection<Article> RelatedArticles { get; set; }
     }
-
 }

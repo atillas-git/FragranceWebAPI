@@ -19,11 +19,46 @@ namespace Infastructure.Context
         public DbSet<Comment> Comments { get; set; }
         public DbSet<FragranceCreator> FragranceCreators { get; set; }
         public DbSet<FragranceFragranceNote> FragranceFragranceNotes { get; set; }
+        public DbSet<Brand> Brands { get; set; }
+        public DbSet<Article> Articles { get; set; }
+        public DbSet<Forum> Forums { get; set; }
+        public DbSet<ForumPost> ForumPosts { get; set; }
         public FragranceDbContext(DbContextOptions<FragranceDbContext> options) : base(options)
         {
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            // Many-to-Many: Article <-> Fragrance
+            modelBuilder.Entity<Article>()
+                .HasMany(a => a.RelatedFragrances)
+                .WithMany(f => f.RelatedArticles)
+                .UsingEntity<Dictionary<string, object>>(
+                    "ArticleFragrance",  // Name of the join table
+                    af => af.HasOne<Fragrance>().WithMany().HasForeignKey("FragranceId"),
+                    af => af.HasOne<Article>().WithMany().HasForeignKey("ArticleId")
+                );
+
+            // Many-to-Many: Article <-> Brand
+            modelBuilder.Entity<Article>()
+                .HasMany(a => a.RelatedBrands)
+                .WithMany(b => b.RelatedArticles)
+                .UsingEntity<Dictionary<string, object>>(
+                    "ArticleBrand",  // Name of the join table
+                    ab => ab.HasOne<Brand>().WithMany().HasForeignKey("BrandId"),
+                    ab => ab.HasOne<Article>().WithMany().HasForeignKey("ArticleId")
+                );
+
+            // Many-to-Many: Article <-> Creator
+            modelBuilder.Entity<Article>()
+                .HasMany(a => a.RelatedCreators)
+                .WithMany(c => c.RelatedArticles)
+                .UsingEntity<Dictionary<string, object>>(
+                    "ArticleCreator",  // Name of the join table
+                    ac => ac.HasOne<Creator>().WithMany().HasForeignKey("CreatorId"),
+                    ac => ac.HasOne<Article>().WithMany().HasForeignKey("ArticleId")
+                );
+
             // Configure FragranceCreator many-to-many relationship
             modelBuilder.Entity<FragranceCreator>()
                 .HasKey(fc => new { fc.FragranceId, fc.CreatorId });

@@ -50,6 +50,12 @@ namespace Application.Services
         {
             await _fragranceNoteRepository.DeleteAsync(id);
         }
+
+        public async Task<IEnumerable<FragranceNoteDto>> SearchAsync(string query, int pageNumber, int pageSize)
+        {
+            var fragranceNotes = await _fragranceNoteRepository.SearchAsync(query,pageNumber,pageSize);
+            return _mapper.Map<IEnumerable<FragranceNoteDto>>(fragranceNotes);
+        }
     }
 }
 

@@ -62,7 +62,7 @@ namespace Infastructure.Repositories
             }
         }
 
-        public async Task<IEnumerable<Fragrance>> SearchAsync(string query)
+        public async Task<IEnumerable<Fragrance>> SearchAsync(string query, int pageNumber = 1, int pageSize = 10)
         {
             return await _context.Fragrances
                 .Include(f => f.FragranceCreators)
@@ -72,6 +72,10 @@ namespace Infastructure.Repositories
                 .Where(f => f.Name.Contains(query, StringComparison.OrdinalIgnoreCase) ||
                             f.FragranceCreators.Any(fc => fc.Creator.Name.Contains(query, StringComparison.OrdinalIgnoreCase)) ||
                             f.FragranceFragranceNotes.Any(fn => fn.FragranceNote.Name.Contains(query, StringComparison.OrdinalIgnoreCase)))
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .AsNoTracking()
+                .OrderBy(f=>f.Name)
                 .ToListAsync();
         }
     }

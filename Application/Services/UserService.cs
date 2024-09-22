@@ -67,6 +67,12 @@ namespace Application.Services
         {
             await _userRepository.DeleteAsync(id);
         }
+
+        public async Task<IEnumerable<UserDto>> GetByNameAsync(string name)
+        {
+            var users = await _userRepository.GetByNameAsync(name);
+            return _mapper.Map<IEnumerable<UserDto>>(users);
+        }
     }
 }
 

@@ -64,9 +64,9 @@ namespace Application.Services
             await _fragranceRepository.DeleteFragranceAsync(id);
         }
 
-        public async Task<IEnumerable<FragranceDto>> SearchAsync(string query)
+        public async Task<IEnumerable<FragranceDto>> SearchAsync(string query,int pageNumber,int pageSize)
         {
-            var fragrances = await _fragranceRepository.SearchAsync(query);
+            var fragrances = await _fragranceRepository.SearchAsync(query,pageNumber,pageSize);
 
             var fragranceDtos = _mapper.Map<IEnumerable<FragranceDto>>(fragrances);
 

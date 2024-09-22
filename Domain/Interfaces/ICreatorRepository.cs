@@ -14,5 +14,6 @@ namespace Domain.Interfaces
         Task AddAsync(Creator creator);
         Task UpdateAsync(Creator creator);
         Task DeleteAsync(int id);
+        Task<IEnumerable<Creator>> SearchAsync(string query,int pageNumber,int pageSize);
     }
 }

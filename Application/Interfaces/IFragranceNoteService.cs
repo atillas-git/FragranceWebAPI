@@ -11,6 +11,7 @@ namespace Application.Interfaces
         Task AddFragranceNoteAsync(FragranceNoteCreateUpdateDto fragranceNoteDto);  // Add a new fragrance note
         Task UpdateFragranceNoteAsync(int id, FragranceNoteCreateUpdateDto fragranceNoteDto);  // Update an existing fragrance note
         Task DeleteFragranceNoteAsync(int id);  // Delete a fragrance note
+        Task<IEnumerable<FragranceNoteDto>> SearchAsync(string query, int pageNumber, int pageSize);
     }
 }
 

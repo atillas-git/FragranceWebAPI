@@ -50,6 +50,12 @@ namespace Application.Services
         {
             await _creatorRepository.DeleteAsync(id);
         }
+
+        public async Task<IEnumerable<CreatorDto>> SearchAsync(string query, int pageNumber, int pageSize)
+        {
+            var creators = await  _creatorRepository.SearchAsync(query, pageNumber, pageSize);
+            return _mapper.Map<IEnumerable<CreatorDto>>(creators);
+        }
     }
 }
 

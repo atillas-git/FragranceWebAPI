@@ -8,7 +8,8 @@ public class UserMappingProfile : Profile
     {
         // Entity to DTO mapping
         CreateMap<User, UserDto>()
-            .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email));
+            .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+            .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role));
 
         // DTO to Entity mapping for Create/Update operations
         CreateMap<UserCreateUpdateDto, User>()

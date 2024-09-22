@@ -12,6 +12,7 @@ namespace Application.Interfaces
         Task AddUserAsync(UserCreateUpdateDto userDto);  // Add a new user
         Task UpdateUserAsync(int id, UserCreateUpdateDto userDto);  // Update an existing user
         Task DeleteUserAsync(int id);  // Delete a user
+        Task<IEnumerable<UserDto>> GetByNameAsync(string name);
     }
 }
 

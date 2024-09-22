@@ -20,6 +20,9 @@ namespace Domain.Entities
         public ICollection<FragranceFragranceNote> FragranceFragranceNotes { get; set; }
         public ICollection<Rating> Ratings { get; set; }
         public ICollection<Comment> Comments { get; set; }
+        public ICollection<Article> RelatedArticles { get; set; }
+        public int BrandId { get; set; }
+        public Brand Brand { get; set; }
     }
 
 }

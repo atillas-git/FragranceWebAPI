@@ -11,6 +11,7 @@ namespace Domain.Interfaces
         Task AddAsync(FragranceNote fragranceNote);
         Task UpdateAsync(FragranceNote fragranceNote);
         Task DeleteAsync(int id);
+        Task<IEnumerable<FragranceNote>> SearchAsync(string query, int pageNumber,int pageSize);
     }
 }
 

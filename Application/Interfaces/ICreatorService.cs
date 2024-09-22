@@ -11,6 +11,7 @@ namespace Application.Interfaces
         Task AddCreatorAsync(CreatorCreateUpdateDto creatorDto);  // Add a new creator
         Task UpdateCreatorAsync(int id, CreatorCreateUpdateDto creatorDto);  // Update an existing creator
         Task DeleteCreatorAsync(int id);  // Delete a creator
+        Task<IEnumerable<CreatorDto>> SearchAsync(string query, int pageNumber, int pageSize);
     }
 }
 

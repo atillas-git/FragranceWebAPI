@@ -51,6 +51,16 @@ namespace Infrastructure.Repositories
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task<IEnumerable<FragranceNote>> SearchAsync(string query, int pageNumber = 1, int pageSize = 10)
+        {
+            return await _context.FragranceNotes
+                .Where(fn=>fn.Name.Contains(query,StringComparison.OrdinalIgnoreCase))
+                .Skip((pageNumber-1) * pageSize)
+                .Take(pageSize)
+                .AsNoTracking()
+                .ToListAsync();
+        }
     }
 }
 
