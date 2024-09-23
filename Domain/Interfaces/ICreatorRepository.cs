@@ -13,7 +13,7 @@ namespace Domain.Interfaces
         Task<IEnumerable<Creator>> GetAllAsync();
         Task AddAsync(Creator creator);
         Task UpdateAsync(Creator creator);
-        Task DeleteAsync(int id);
+        Task DeleteAsync(Creator creator);
         Task<IEnumerable<Creator>> SearchAsync(string query,int pageNumber,int pageSize);
     }
 }

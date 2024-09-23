@@ -23,7 +23,7 @@ namespace FragranceAPI.Controllers
             var fragrances = await _fragranceService.GetAllFragrancesAsync();
             return Ok(fragrances);
         }
-        [HttpPost("admin/add")]
+        [HttpPost("admin")]
         [Authorize(Roles ="Admin")]
         public async Task<IActionResult> AddFragrance(FragranceCreateUpdateDto dto)
         {
@@ -31,7 +31,7 @@ namespace FragranceAPI.Controllers
             return Ok();
         }
 
-        [HttpPut("admin/update/{id}")]
+        [HttpPut("admin/{id}")]
         [Authorize(Roles ="Admin")]
         public async Task<IActionResult> UpdateFragrance(int id,[FromBody] FragranceCreateUpdateDto dto)
         {
@@ -39,7 +39,8 @@ namespace FragranceAPI.Controllers
             return Ok();
         }
 
-        [HttpDelete("admin/delete/{id}")]
+        [HttpDelete("admin/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteFragrance(int id)
         {
             await _fragranceService.DeleteFragranceAsync(id);
@@ -55,7 +56,7 @@ namespace FragranceAPI.Controllers
         [HttpGet("search")]
         public async Task<IActionResult> SearchFragrances(string query,int pageNumber = 1,int pageSize = 10)
         {
-            var fragrances = await _fragranceService.SearchAsync(query,pageNumber,pageSize);
+            var fragrances = await _fragranceService.SearchFragranceAsync(query,pageNumber,pageSize);
             if(fragrances == null) {
                 return NotFound();
             }

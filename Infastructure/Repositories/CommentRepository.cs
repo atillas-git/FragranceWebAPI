@@ -22,6 +22,7 @@ namespace Infrastructure.Repositories
             return await _context.Comments
                 .Include(c => c.User)
                 .Include(c => c.Fragrance)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
 
@@ -30,6 +31,7 @@ namespace Infrastructure.Repositories
             return await _context.Comments
                 .Where(c => c.FragranceId == fragranceId)
                 .Include(c => c.User)
+                .AsNoTracking()
                 .ToListAsync();
         }
 
@@ -37,7 +39,8 @@ namespace Infrastructure.Repositories
         {
             return await _context.Comments
                 .Where(c => c.UserId == userId)
-                .Include(c => c.Fragrance)
+                .Include(c => c.User)
+                .AsNoTracking()
                 .ToListAsync();
         }
 
@@ -53,14 +56,10 @@ namespace Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(Comment comment)
         {
-            var comment = await _context.Comments.FindAsync(id);
-            if (comment != null)
-            {
-                _context.Comments.Remove(comment);
-                await _context.SaveChangesAsync();
-            }
+            _context.Comments.Remove(comment);
+            await _context.SaveChangesAsync();
         }
     }
 }

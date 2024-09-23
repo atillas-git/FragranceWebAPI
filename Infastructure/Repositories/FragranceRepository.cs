@@ -24,6 +24,8 @@ namespace Infastructure.Repositories
         {
             return await _context.Fragrances.Include(f => f.FragranceCreators)
                                              .Include(f => f.FragranceFragranceNotes)
+                                             .Include(f => f.Brand)
+                                             .AsNoTracking()
                                              .FirstOrDefaultAsync(f => f.Id == id);
         }
 
@@ -34,35 +36,30 @@ namespace Infastructure.Repositories
 
         public async Task AddFragranceAsync(Fragrance fragrance)
         {
+            var existingFragrance = await _context.Fragrances
+                .Include(f => f.Brand)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(f => f.Name == fragrance.Name && f.Brand.Id == fragrance.BrandId);
+            if (existingFragrance != null) {
+                return;
+            }
             await _context.Fragrances.AddAsync(fragrance);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteFragranceAsync(int id)
+        public async Task DeleteFragranceAsync(Fragrance fragrance)
         {
-            var fragrance = await _context.Fragrances.FindAsync(id);
-
-            if (fragrance != null)
-            {
-                _context.Fragrances.Remove(fragrance);
-                await _context.SaveChangesAsync();
-            }
+            _context.Fragrances.Remove(fragrance);
+            await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateFragranceAsync(int id, Fragrance fragrance)
+        public async Task UpdateFragranceAsync(Fragrance fragrance)
         {
-            var fragranceToUpdate = await _context.Fragrances.FindAsync(id);
-
-            if (fragranceToUpdate != null)
-            {
-                fragranceToUpdate.Name = fragrance.Name;
-                fragranceToUpdate.Gender = fragrance.Gender;
-                fragranceToUpdate.PictureUrl = fragrance.PictureUrl;
-                await _context.SaveChangesAsync();
-            }
+            _context.Update(fragrance);
+            await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Fragrance>> SearchAsync(string query, int pageNumber = 1, int pageSize = 10)
+        public async Task<IEnumerable<Fragrance>> SearchFragranceAsync(string query, int pageNumber = 1, int pageSize = 10)
         {
             return await _context.Fragrances
                 .Include(f => f.FragranceCreators)

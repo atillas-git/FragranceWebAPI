@@ -20,6 +20,7 @@ namespace Infrastructure.Repositories
         {
             return await _context.FragranceNotes
                 .Include(fn => fn.FragranceFragranceNotes)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(fn => fn.Id == id);
         }
 
@@ -32,6 +33,11 @@ namespace Infrastructure.Repositories
 
         public async Task AddAsync(FragranceNote fragranceNote)
         {
+            var existingNote = await _context.FragranceNotes.FirstOrDefaultAsync(fn => fn.Name == fragranceNote.Name);
+            if (existingNote != null)
+            {
+                return;
+            }
             await _context.FragranceNotes.AddAsync(fragranceNote);
             await _context.SaveChangesAsync();
         }
@@ -42,14 +48,10 @@ namespace Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(FragranceNote fragranceNote)
         {
-            var fragranceNote = await _context.FragranceNotes.FindAsync(id);
-            if (fragranceNote != null)
-            {
-                _context.FragranceNotes.Remove(fragranceNote);
-                await _context.SaveChangesAsync();
-            }
+            _context.FragranceNotes.Remove(fragranceNote);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<FragranceNote>> SearchAsync(string query, int pageNumber = 1, int pageSize = 10)

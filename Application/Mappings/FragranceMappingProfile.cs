@@ -19,13 +19,16 @@ namespace Application.Mappings
                 .ForMember(dest => dest.Creators, opt => opt.MapFrom(src => src.FragranceCreators.Select(fc => fc.Creator)))
                 .ForMember(dest => dest.FragranceNotes, opt => opt.MapFrom(src => src.FragranceFragranceNotes.Select(fn => fn.FragranceNote)))
                 .ForMember(dest => dest.Ratings, opt => opt.MapFrom(src => src.Ratings))
-                .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.Comments));
+                .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.Comments))
+                .ForMember(dest => dest.Brand, opt => opt.MapFrom(src => src.Brand));
 
             // Map FragranceCreateUpdateDto to Fragrance entity (for create/update operations)
             CreateMap<FragranceCreateUpdateDto, Fragrance>()
                 .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => (Domain.Enums.Gender)Enum.Parse(typeof(Domain.Enums.Gender), src.Gender)))
                 .ForMember(dest => dest.FragranceCreators, opt => opt.MapFrom(src => src.CreatorIds.Select(id => new FragranceCreator { CreatorId = id })))
-                .ForMember(dest => dest.FragranceFragranceNotes, opt => opt.MapFrom(src => src.NoteIds.Select(id => new FragranceFragranceNote { FragranceNoteId = id })));
+                .ForMember(dest => dest.FragranceFragranceNotes, opt => opt.MapFrom(src => src.NoteIds.Select(id => new FragranceFragranceNote { FragranceNoteId = id })))
+                .ForMember(dest => dest.BrandId,
+                       opt => opt.MapFrom(src => src.BrandId ?? 0));
         }
     }
 }

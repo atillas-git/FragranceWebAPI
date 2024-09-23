@@ -13,5 +13,6 @@ namespace Application.Dtos.Fragrance
         public string Gender { get; set; }  // Gender as string, convert to enum in service
         public IEnumerable<int> CreatorIds { get; set; }  // List of Creator IDs
         public IEnumerable<int> NoteIds { get; set; }  // List of Fragrance Note IDs
+        public int? BrandId { get; set; }
     }
 }

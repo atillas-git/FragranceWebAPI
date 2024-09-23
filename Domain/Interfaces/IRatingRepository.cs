@@ -11,6 +11,6 @@ namespace Domain.Interfaces
         Task<IEnumerable<Rating>> GetAllByUserIdAsync(int userId);
         Task AddAsync(Rating rating);
         Task UpdateAsync(Rating rating);
-        Task DeleteAsync(int id);
+        Task DeleteAsync(Rating rating);
     }
 }

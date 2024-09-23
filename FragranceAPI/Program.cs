@@ -2,6 +2,7 @@ using Application.Interfaces;
 using Application.Mappings;
 using Application.Services;
 using Domain.Interfaces;
+using FragranceAPI.Middlewares;
 using Infastructure.Context;
 using Infastructure.Repositories;
 using Infastructure.Repositories.Infrastructure.Repositories;
@@ -83,14 +84,17 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddAutoMapper(typeof(FragranceMappingProfile), typeof(CreatorMappingProfile), typeof(FragranceNoteMappingProfile), typeof(RatingMappingProfile), typeof(CommentMappingProfile), typeof(UserMappingProfile));
+builder.Services.AddAutoMapper(typeof(FragranceMappingProfile), typeof(CreatorMappingProfile), typeof(FragranceNoteMappingProfile), 
+    typeof(RatingMappingProfile), typeof(CommentMappingProfile), typeof(UserMappingProfile),typeof(ArticleMappingProfile),
+    typeof(BrandMappingProfile),typeof(ForumMappingProfile));
+
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.PropertyNamingPolicy = null;
     });
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -108,6 +112,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseCors(AllowFrontEnd);
 

@@ -6,6 +6,8 @@ using Domain.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Exceptions;
+using Application.Messages;
 
 namespace Application.Services
 {
@@ -24,7 +26,10 @@ namespace Application.Services
         {
             var fragrance = await _fragranceRepository.GetFragranceByIdAsync(id);
 
-            // Use AutoMapper to convert entity to DTO
+            if (fragrance == null) {
+                throw new AppException(ResponseMessages.Fragrance_FragranceDoesNotExists);
+            }
+
             return _mapper.Map<FragranceDto>(fragrance);
         }
 
@@ -32,44 +37,45 @@ namespace Application.Services
         {
             var fragrances = await _fragranceRepository.GetAllFragrancesAsync();
 
-            // Use AutoMapper to map list of Fragrances to list of FragranceDto
             return _mapper.Map<IEnumerable<FragranceDto>>(fragrances);
         }
 
         public async Task AddFragranceAsync(FragranceCreateUpdateDto fragranceDto)
         {
-            // Map the DTO to the Fragrance entity
+            if(string.IsNullOrEmpty(fragranceDto.Name) || string.IsNullOrEmpty(fragranceDto.Gender)
+                || String.IsNullOrEmpty(fragranceDto.Gender))
+            {
+                throw new AppException(ResponseMessages.Shared_PleaseFillTheRequiredFields);
+            }
             var fragrance = _mapper.Map<Fragrance>(fragranceDto);
-
-            // Add the fragrance to the repository
             await _fragranceRepository.AddFragranceAsync(fragrance);
         }
 
         public async Task UpdateFragranceAsync(int id, FragranceCreateUpdateDto fragranceDto)
         {
-            // Retrieve the existing fragrance entity
             var fragrance = await _fragranceRepository.GetFragranceByIdAsync(id);
-            if (fragrance == null) return;
-
-            // Map the updated DTO values to the existing entity
+            if (fragrance == null)
+            {
+                throw new AppException(ResponseMessages.Fragrance_FragranceDoesNotExists);
+            };
             _mapper.Map(fragranceDto, fragrance);
-
-            // Update the fragrance in the repository
-            await _fragranceRepository.UpdateFragranceAsync(id, fragrance);
+            await _fragranceRepository.UpdateFragranceAsync(fragrance);
         }
 
         public async Task DeleteFragranceAsync(int id)
         {
-            // Delete the fragrance from the repository
-            await _fragranceRepository.DeleteFragranceAsync(id);
+            var fragrance = await _fragranceRepository.GetFragranceByIdAsync(id);
+            if(fragrance == null)
+            {
+                throw new AppException(ResponseMessages.Fragrance_FragranceDoesNotExists);
+            };
+            await _fragranceRepository.DeleteFragranceAsync(fragrance);
         }
 
-        public async Task<IEnumerable<FragranceDto>> SearchAsync(string query,int pageNumber,int pageSize)
+        public async Task<IEnumerable<FragranceDto>> SearchFragranceAsync(string query,int pageNumber,int pageSize)
         {
-            var fragrances = await _fragranceRepository.SearchAsync(query,pageNumber,pageSize);
-
+            var fragrances = await _fragranceRepository.SearchFragranceAsync(query,pageNumber,pageSize);
             var fragranceDtos = _mapper.Map<IEnumerable<FragranceDto>>(fragrances);
-
             return fragranceDtos;
         }
     }

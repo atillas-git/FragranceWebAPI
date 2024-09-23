@@ -29,6 +29,7 @@ namespace Infastructure.Repositories
                 return await _context.Creators
                     .Include(c => c.FragranceCreators)
                     .ThenInclude(fc => fc.Fragrance)
+                    .AsNoTracking()
                     .FirstOrDefaultAsync(c => c.Id == id);
             }
 
@@ -52,14 +53,10 @@ namespace Infastructure.Repositories
                 await _context.SaveChangesAsync();
             }
 
-            public async Task DeleteAsync(int id)
+            public async Task DeleteAsync(Creator creator)
             {
-                var creator = await _context.Creators.FindAsync(id);
-                if (creator != null)
-                {
-                    _context.Creators.Remove(creator);
-                    await _context.SaveChangesAsync();
-                }
+                _context.Creators.Remove(creator);
+                await _context.SaveChangesAsync();
             }
 
             public async Task<IEnumerable<Creator>> SearchAsync(string query, int pageNumber = 1, int pageSize = 10)

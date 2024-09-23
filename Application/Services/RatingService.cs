@@ -5,6 +5,8 @@ using Domain.Entities;
 using Domain.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Application.Messages;
+using Application.Exceptions;
 
 namespace Application.Services
 {
@@ -22,6 +24,9 @@ namespace Application.Services
         public async Task<RatingDto> GetRatingAsync(int id)
         {
             var rating = await _ratingRepository.GetByIdAsync(id);
+            if (rating == null) { 
+                throw new AppException(ResponseMessages.Rating_RatingDoesNotExist);
+            }
             return _mapper.Map<RatingDto>(rating);  // Use AutoMapper to map entity to DTO
         }
 
@@ -46,7 +51,10 @@ namespace Application.Services
         public async Task UpdateRatingAsync(int id, RatingCreateUpdateDto ratingDto)
         {
             var rating = await _ratingRepository.GetByIdAsync(id);
-            if (rating == null) return;
+            if (rating == null)
+            {
+                throw new AppException(ResponseMessages.Rating_RatingDoesNotExist);
+            }
 
             _mapper.Map(ratingDto, rating);  // Map updated DTO to existing entity
             await _ratingRepository.UpdateAsync(rating);
@@ -54,7 +62,12 @@ namespace Application.Services
 
         public async Task DeleteRatingAsync(int id)
         {
-            await _ratingRepository.DeleteAsync(id);
+            var rating = await _ratingRepository.GetByIdAsync(id);
+            if (rating == null)
+            {
+                throw new AppException(ResponseMessages.Rating_RatingDoesNotExist);
+            }
+            await _ratingRepository.DeleteAsync(rating);
         }
     }
 }

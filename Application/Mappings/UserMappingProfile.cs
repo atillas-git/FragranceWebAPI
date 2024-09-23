@@ -2,19 +2,22 @@
 using Application.Dtos.User;
 using Domain.Entities;
 
-public class UserMappingProfile : Profile
+namespace Application.Mappings
 {
-    public UserMappingProfile()
+    public class UserMappingProfile : Profile
     {
-        // Entity to DTO mapping
-        CreateMap<User, UserDto>()
-            .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
-            .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role));
+        public UserMappingProfile()
+        {
+            // Entity to DTO mapping
+            CreateMap<User, UserDto>()
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role));
 
-        // DTO to Entity mapping for Create/Update operations
-        CreateMap<UserCreateUpdateDto, User>()
-            .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
-            .ForMember(dest => dest.PasswordHash, opt => opt.Ignore());  // Assume password is hashed in service layer
+            // DTO to Entity mapping for Create/Update operations
+            CreateMap<UserCreateUpdateDto, User>()
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.PasswordHash, opt => opt.Ignore());  // Assume password is hashed in service layer
+        }
     }
 }
 

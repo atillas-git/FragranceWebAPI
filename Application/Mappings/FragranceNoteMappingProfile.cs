@@ -2,15 +2,18 @@
 using Application.Dtos.FragranceNote;
 using Domain.Entities;
 
-public class FragranceNoteMappingProfile : Profile
+namespace Application.Mappings
 {
-    public FragranceNoteMappingProfile()
+    public class FragranceNoteMappingProfile : Profile
     {
-        // Entity to DTO mapping
-        CreateMap<FragranceNote, FragranceNoteDto>();
+        public FragranceNoteMappingProfile()
+        {
+            // Entity to DTO mapping
+            CreateMap<FragranceNote, FragranceNoteDto>();
 
-        // DTO to Entity mapping for Create/Update operations
-        CreateMap<FragranceNoteCreateUpdateDto, FragranceNote>();
+            // DTO to Entity mapping for Create/Update operations
+            CreateMap<FragranceNoteCreateUpdateDto, FragranceNote>();
+        }
     }
 }
 

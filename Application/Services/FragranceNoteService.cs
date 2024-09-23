@@ -5,6 +5,8 @@ using Domain.Entities;
 using Domain.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Application.Messages;
+using Application.Exceptions;
 
 namespace Application.Services
 {
@@ -22,6 +24,9 @@ namespace Application.Services
         public async Task<FragranceNoteDto> GetFragranceNoteAsync(int id)
         {
             var fragranceNote = await _fragranceNoteRepository.GetByIdAsync(id);
+            if (fragranceNote == null) {
+                throw new AppException(ResponseMessages.FragranceNote_FragranceNoteAlreadyExist);
+            }
             return _mapper.Map<FragranceNoteDto>(fragranceNote);  // Use AutoMapper to map entity to DTO
         }
 
@@ -33,6 +38,10 @@ namespace Application.Services
 
         public async Task AddFragranceNoteAsync(FragranceNoteCreateUpdateDto fragranceNoteDto)
         {
+            if (string.IsNullOrEmpty(fragranceNoteDto.Name))
+            {
+                throw new AppException(ResponseMessages.Shared_PleaseFillTheRequiredFields);
+            }
             var fragranceNote = _mapper.Map<FragranceNote>(fragranceNoteDto);  // Map DTO to entity
             await _fragranceNoteRepository.AddAsync(fragranceNote);
         }
@@ -40,15 +49,22 @@ namespace Application.Services
         public async Task UpdateFragranceNoteAsync(int id, FragranceNoteCreateUpdateDto fragranceNoteDto)
         {
             var fragranceNote = await _fragranceNoteRepository.GetByIdAsync(id);
-            if (fragranceNote == null) return;
-
+            if (fragranceNote == null)
+            {
+                throw new AppException(ResponseMessages.FragranceNote_FragranceNoteAlreadyExist);    
+            }
             _mapper.Map(fragranceNoteDto, fragranceNote);  // Map updated DTO to existing entity
             await _fragranceNoteRepository.UpdateAsync(fragranceNote);
         }
 
         public async Task DeleteFragranceNoteAsync(int id)
         {
-            await _fragranceNoteRepository.DeleteAsync(id);
+            var fragranceNote = await _fragranceNoteRepository.GetByIdAsync(id);
+            if (fragranceNote == null)
+            {
+                throw new AppException(ResponseMessages.FragranceNote_FragranceNoteAlreadyExist);
+            }
+            await _fragranceNoteRepository.DeleteAsync(fragranceNote);
         }
 
         public async Task<IEnumerable<FragranceNoteDto>> SearchAsync(string query, int pageNumber, int pageSize)

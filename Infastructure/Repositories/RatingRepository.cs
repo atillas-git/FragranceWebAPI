@@ -22,6 +22,7 @@ namespace Infrastructure.Repositories
             return await _context.Ratings
                 .Include(r => r.User)
                 .Include(r => r.Fragrance)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(r => r.Id == id);
         }
 
@@ -53,14 +54,10 @@ namespace Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(Rating rating)
         {
-            var rating = await _context.Ratings.FindAsync(id);
-            if (rating != null)
-            {
-                _context.Ratings.Remove(rating);
-                await _context.SaveChangesAsync();
-            }
+            _context.Ratings.Remove(rating);
+            await _context.SaveChangesAsync();
         }
     }
 }

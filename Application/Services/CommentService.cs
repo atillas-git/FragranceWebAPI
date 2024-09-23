@@ -5,6 +5,8 @@ using Domain.Entities;
 using Domain.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Application.Messages;
+using Application.Exceptions;
 
 namespace Application.Services
 {
@@ -22,6 +24,9 @@ namespace Application.Services
         public async Task<CommentDto> GetCommentAsync(int id)
         {
             var comment = await _commentRepository.GetByIdAsync(id);
+            if (comment == null) {
+                throw new AppException(ResponseMessages.Comment_CommentDoesNotExists);
+            }
             return _mapper.Map<CommentDto>(comment);  // Map entity to DTO
         }
 
@@ -39,6 +44,10 @@ namespace Application.Services
 
         public async Task AddCommentAsync(CommentCreateUpdateDto commentDto)
         {
+            if(string.IsNullOrEmpty(commentDto.Content) || commentDto.UserId == 0 || commentDto.FragranceId == 0)
+            {
+                throw new AppException(ResponseMessages.Shared_PleaseFillTheRequiredFields);
+            }
             var comment = _mapper.Map<Comment>(commentDto);  // Map DTO to entity
             await _commentRepository.AddAsync(comment);
         }
@@ -46,7 +55,10 @@ namespace Application.Services
         public async Task UpdateCommentAsync(int id, CommentCreateUpdateDto commentDto)
         {
             var comment = await _commentRepository.GetByIdAsync(id);
-            if (comment == null) return;
+            if (comment == null)
+            {
+                throw new AppException(ResponseMessages.Comment_CommentDoesNotExists);
+            };
 
             _mapper.Map(commentDto, comment);  // Map updated DTO to existing entity
             await _commentRepository.UpdateAsync(comment);
@@ -54,7 +66,12 @@ namespace Application.Services
 
         public async Task DeleteCommentAsync(int id)
         {
-            await _commentRepository.DeleteAsync(id);
+            var comment = await _commentRepository.GetByIdAsync(id);
+            if (comment == null)
+            {
+                throw new AppException(ResponseMessages.Comment_CommentDoesNotExists);
+            }
+            await _commentRepository.DeleteAsync(comment);
         }
     }
 }

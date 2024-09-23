@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Application.Dtos.Brand;
 using Application.Dtos.Comment;
 using Application.Dtos.Creator;
 using Application.Dtos.FragranceNote;
@@ -20,5 +21,6 @@ namespace Application.Dtos.Fragrance
         public IEnumerable<FragranceNoteDto> FragranceNotes { get; set; }
         public IEnumerable<RatingDto> Ratings { get; set; }
         public IEnumerable<CommentDto> Comments { get; set; }
+        public BrandDto Brand { get; set; }
     }
 }

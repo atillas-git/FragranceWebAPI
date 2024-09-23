@@ -14,7 +14,7 @@ namespace Domain.Interfaces
         Task<IEnumerable<User>> GetAllAsync();
         Task AddAsync(User user);
         Task UpdateAsync(User user);
-        Task DeleteAsync(int id);
+        Task DeleteAsync(User user);
         Task<IEnumerable<User>> GetByNameAsync(string name);
     }
 }

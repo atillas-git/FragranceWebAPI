@@ -11,7 +11,7 @@ namespace Domain.Interfaces
         Task<IEnumerable<Comment>> GetAllByUserIdAsync(int userId);
         Task AddAsync(Comment comment);
         Task UpdateAsync(Comment comment);
-        Task DeleteAsync(int id);
+        Task DeleteAsync(Comment comment);
     }
 }
 

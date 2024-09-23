@@ -5,6 +5,8 @@ using Domain.Entities;
 using Domain.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Application.Messages;
+using Application.Exceptions;
 
 namespace Application.Services
 {
@@ -22,6 +24,9 @@ namespace Application.Services
         public async Task<CreatorDto> GetCreatorAsync(int id)
         {
             var creator = await _creatorRepository.GetByIdAsync(id);
+            if (creator == null) {
+                throw new AppException(ResponseMessages.Creator_CreatorDoesNotExist);
+            }
             return _mapper.Map<CreatorDto>(creator);  // Use AutoMapper to map entity to DTO
         }
 
@@ -33,22 +38,33 @@ namespace Application.Services
 
         public async Task AddCreatorAsync(CreatorCreateUpdateDto creatorDto)
         {
-            var creator = _mapper.Map<Creator>(creatorDto);  // Map DTO to entity
+            if (string.IsNullOrEmpty(creatorDto.Name))
+            {
+                throw new AppException(ResponseMessages.Shared_PleaseFillTheRequiredFields);
+            }
+            var creator = _mapper.Map<Creator>(creatorDto);
             await _creatorRepository.AddAsync(creator);
         }
 
         public async Task UpdateCreatorAsync(int id, CreatorCreateUpdateDto creatorDto)
         {
             var creator = await _creatorRepository.GetByIdAsync(id);
-            if (creator == null) return;
-
+            if (creator == null)
+            {
+                throw new AppException(ResponseMessages.Creator_CreatorDoesNotExist);
+            }
             _mapper.Map(creatorDto, creator);  // Map updated DTO to existing entity
             await _creatorRepository.UpdateAsync(creator);
         }
 
         public async Task DeleteCreatorAsync(int id)
         {
-            await _creatorRepository.DeleteAsync(id);
+            var creator = await _creatorRepository.GetByIdAsync(id);
+            if (creator == null)
+            {
+                throw new AppException(ResponseMessages.Creator_CreatorDoesNotExist);
+            }
+            await _creatorRepository.DeleteAsync(creator);
         }
 
         public async Task<IEnumerable<CreatorDto>> SearchAsync(string query, int pageNumber, int pageSize)

@@ -12,8 +12,8 @@ namespace Domain.Interfaces
         Task<Fragrance> GetFragranceByIdAsync(int id);
         Task<IEnumerable<Fragrance>> GetAllFragrancesAsync();
         Task AddFragranceAsync(Fragrance fragrance);
-        Task DeleteFragranceAsync(int id);
-        Task UpdateFragranceAsync(int id,Fragrance fragrance);
-        Task<IEnumerable<Fragrance>> SearchAsync(string query,int pageNumber,int pageSize);
+        Task DeleteFragranceAsync(Fragrance fragrance);
+        Task UpdateFragranceAsync(Fragrance fragrance);
+        Task<IEnumerable<Fragrance>> SearchFragranceAsync(string query,int pageNumber,int pageSize);
     }
 }
