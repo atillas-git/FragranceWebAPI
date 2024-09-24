@@ -8,9 +8,9 @@ namespace Application.Dtos.Brand
 {
     public class BrandCreateUpdateDto
     {
-        public string Name { get; set; }
-        public string Country { get; set; }
-        public string WebsiteUrl { get; set; }
-        public string Description { get; set; }
+        public string? Name { get; set; }
+        public string? Country { get; set; }
+        public string? WebsiteUrl { get; set; }
+        public string? Description { get; set; }
     }
 }

@@ -9,9 +9,9 @@ namespace Application.Dtos.Creator
 {
     public class CreatorDto
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public IEnumerable<ArticleDto> RelatedArticles { get; set; }
+        public int? Id { get; set; }
+        public string? Name { get; set; }
+        public IEnumerable<ArticleDto>? RelatedArticles { get; set; }
     }
 }
 

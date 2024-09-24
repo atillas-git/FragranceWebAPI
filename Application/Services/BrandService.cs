@@ -26,8 +26,11 @@ namespace Application.Services
 
         public async Task AddBrandAsync(BrandCreateUpdateDto brandCreateUpdateDto)
         {
-            if (string.IsNullOrEmpty(brandCreateUpdateDto.Name) || string.IsNullOrEmpty(brandCreateUpdateDto.Country)){
-                throw new AppException(ResponseMessages.Brand_NameCountryRequired);
+            if (string.IsNullOrEmpty(brandCreateUpdateDto.Name) 
+                || string.IsNullOrEmpty(brandCreateUpdateDto.Country)
+                || string.IsNullOrEmpty(brandCreateUpdateDto.Description)
+                || string.IsNullOrEmpty(brandCreateUpdateDto.WebsiteUrl)){
+                throw new AppException(ResponseMessages.Shared_PleaseFillTheRequiredFields);
             }
             var brand = await _brandRepository.GetBrandByNameAsync(brandCreateUpdateDto.Name);
             
@@ -63,7 +66,7 @@ namespace Application.Services
             {
                 throw new AppException(ResponseMessages.Brand_BrandDoesNotExists);
             }
-            throw new NotImplementedException();
+            return _mapper.Map<BrandDto>(brand);
         }
 
         public async Task<BrandDto> GetBrandByNameAsync(string name)

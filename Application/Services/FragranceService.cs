@@ -43,7 +43,7 @@ namespace Application.Services
         public async Task AddFragranceAsync(FragranceCreateUpdateDto fragranceDto)
         {
             if(string.IsNullOrEmpty(fragranceDto.Name) || string.IsNullOrEmpty(fragranceDto.Gender)
-                || String.IsNullOrEmpty(fragranceDto.Gender))
+                || String.IsNullOrEmpty(fragranceDto.Gender) || fragranceDto.BrandId == null)
             {
                 throw new AppException(ResponseMessages.Shared_PleaseFillTheRequiredFields);
             }

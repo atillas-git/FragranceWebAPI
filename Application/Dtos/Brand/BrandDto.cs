@@ -10,13 +10,13 @@ namespace Application.Dtos.Brand
 {
     public class BrandDto
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Country { get; set; }
-        public string WebsiteUrl { get; set; }
-        public string Description { get; set; }
-        public IEnumerable<FragranceDto> Fragrances { get; set; }
-        public IEnumerable<ArticleDto> RelatedArticles { get; set; }
+        public int? Id { get; set; }
+        public string? Name { get; set; }
+        public string? Country { get; set; }
+        public string? WebsiteUrl { get; set; }
+        public string? Description { get; set; }
+        public IEnumerable<FragranceDto>? Fragrances { get; set; }
+        public IEnumerable<ArticleDto>? RelatedArticles { get; set; }
     }
 
 }

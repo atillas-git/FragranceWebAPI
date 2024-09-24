@@ -38,27 +38,43 @@ namespace Infastructure.Repositories
 
         public async Task<Brand> GetBrandByIdAsync(int id)
         {
-            return await _context.Brands.FindAsync(id);
+            return await _context.Brands
+                .Include(b => b.Fragrances)
+                .Include(b=>b.RelatedArticles)
+                .FirstOrDefaultAsync(b=>b.Id == id);
         }
 
         public async Task<Brand> GetBrandByNameAsync(string name)
         {
-            return await _context.Brands.FirstOrDefaultAsync(b => b.Name == name);
+            return await _context.Brands
+                .Include(b=>b.Fragrances)
+                .Include(b=>b.RelatedArticles)
+                .FirstOrDefaultAsync(b => b.Name == name);
         }
 
-        public async Task<IEnumerable<Brand>> SearchBrandAsync(string query, int pageNumber = 1, int pageSize=10)
+        public async Task<IEnumerable<Brand>> SearchBrandAsync(string query, int pageNumber = 1, int pageSize = 10)
         {
-            var brands = await _context.Brands.Include(b=>b.Fragrances)
-                .Include(b=>b.RelatedArticles)
-                .AsNoTracking()
-                .Where(b=>b.Name.Contains(query,StringComparison.OrdinalIgnoreCase) 
-                    && b.Country.Contains(query,StringComparison.OrdinalIgnoreCase)
-                    && b.WebsiteUrl.Contains(query,StringComparison.OrdinalIgnoreCase))
+            var brandsQuery = _context.Brands.Include(b => b.Fragrances)
+                .Include(b => b.RelatedArticles)
+                .AsNoTracking();
+
+            if (!string.IsNullOrWhiteSpace(query))
+            {
+                var lowerQuery = query.ToLower();
+
+                brandsQuery = brandsQuery.Where(b => b.Name.ToLower().Contains(lowerQuery)
+                    || b.Country.ToLower().Contains(lowerQuery)
+                    || b.WebsiteUrl.ToLower().Contains(lowerQuery));
+            }
+
+            var brands = await brandsQuery
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
+
             return brands;
         }
+
 
         public async Task UpdateBrandAsync(Brand brand)
         {

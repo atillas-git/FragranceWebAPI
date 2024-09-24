@@ -14,6 +14,7 @@ namespace Domain.Entities
         public string PasswordHash { get; set; }
         public string Role { get; set; }
         public string Name { get; set; }
+        public string PictureUrl { get; set; }
 
         // Navigation properties
         public ICollection<Rating> Ratings { get; set; }

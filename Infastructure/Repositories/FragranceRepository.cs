@@ -61,20 +61,34 @@ namespace Infastructure.Repositories
 
         public async Task<IEnumerable<Fragrance>> SearchFragranceAsync(string query, int pageNumber = 1, int pageSize = 10)
         {
-            return await _context.Fragrances
+            var fragrancesQuery = _context.Fragrances
                 .Include(f => f.FragranceCreators)
                 .Include(f => f.FragranceFragranceNotes)
                 .Include(f => f.Ratings)
                 .Include(f => f.Comments)
-                .Where(f => f.Name.Contains(query, StringComparison.OrdinalIgnoreCase) ||
-                            f.FragranceCreators.Any(fc => fc.Creator.Name.Contains(query, StringComparison.OrdinalIgnoreCase)) ||
-                            f.FragranceFragranceNotes.Any(fn => fn.FragranceNote.Name.Contains(query, StringComparison.OrdinalIgnoreCase)))
+                .Include(f=>f.Brand)
+                .AsNoTracking();
+
+            // If the query is not null or empty, filter the results
+            if (!string.IsNullOrWhiteSpace(query))
+            {
+                var lowerQuery = query.ToLower();
+                fragrancesQuery = fragrancesQuery.Where(f =>
+                    f.Name.Contains(lowerQuery) ||
+                    f.FragranceCreators.Any(fc => fc.Creator.Name.Contains(lowerQuery)) ||
+                    f.FragranceFragranceNotes.Any(fn => fn.FragranceNote.Name.Contains(lowerQuery)));
+            }
+
+            // Apply pagination
+            var fragrances = await fragrancesQuery
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
-                .AsNoTracking()
-                .OrderBy(f=>f.Name)
+                .OrderBy(f => f.Name)
                 .ToListAsync();
+
+            return fragrances;
         }
+
     }
 
 }
