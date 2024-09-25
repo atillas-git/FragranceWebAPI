@@ -19,7 +19,7 @@ namespace Infastructure.Repositories
             _context = context;
         }
 
-        public async Task<User> GetByIdAsync(int id)
+        public async Task<User> GetUserByIdAsync(int id)
         {
             return await _context.Users
                 .Include(u => u.Comments)
@@ -28,7 +28,7 @@ namespace Infastructure.Repositories
                 .FirstOrDefaultAsync(u => u.Id == id);
         }
 
-        public async Task<User> GetByEmailAsync(string email)
+        public async Task<User> GetUserByEmailAsync(string email)
         {
             return await _context.Users
                 .Include(u => u.Comments)
@@ -37,34 +37,32 @@ namespace Infastructure.Repositories
                 .FirstOrDefaultAsync(u => u.Email == email);
         }
 
-        public async Task<IEnumerable<User>> GetAllAsync()
+        public async Task<IEnumerable<User>> GetAllUsersAsync()
         {
             return await _context.Users
-                .Include(u => u.Comments)
-                .Include(u => u.Ratings)
                 .AsNoTracking()
                 .ToListAsync();
         }
 
-        public async Task AddAsync(User user)
+        public async Task AddUserAsync(User user)
         {
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(User user)
+        public async Task UpdateUserAsync(User user)
         {
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(User user)
+        public async Task DeleteUserAsync(User user)
         {
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<User>> GetByNameAsync(string name)
+        public async Task<IEnumerable<User>> GetUsersByNameAsync(string name)
         {
            return await _context.Users.Where(user => user.Name == name).ToListAsync() ;
         }

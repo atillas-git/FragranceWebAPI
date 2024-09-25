@@ -9,5 +9,6 @@ namespace Application.Dtos.Creator
     public class CreatorCreateUpdateDto
     {
         public string Name { get; set; }
+        public string PictureUrl { get; set; }
     }
 }

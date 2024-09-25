@@ -48,7 +48,7 @@ namespace Application.Services
             var brand = await _brandRepository.GetBrandByIdAsync(id);
             if(brand == null)
             {
-                throw new AppException(ResponseMessages.Brand_BrandDoesNotExists);
+                throw new KeyNotFoundException(ResponseMessages.Brand_BrandDoesNotExists);
             }
             await _brandRepository.DeleteBrandAsync(brand);
         }
@@ -64,7 +64,7 @@ namespace Application.Services
             var brand = await _brandRepository.GetBrandByIdAsync(id);
             if(brand == null)
             {
-                throw new AppException(ResponseMessages.Brand_BrandDoesNotExists);
+                throw new KeyNotFoundException(ResponseMessages.Brand_BrandDoesNotExists);
             }
             return _mapper.Map<BrandDto>(brand);
         }
@@ -74,7 +74,7 @@ namespace Application.Services
             var brand = await _brandRepository.GetBrandByNameAsync(name);
             if(brand == null)
             {
-                throw new AppException(ResponseMessages.Brand_BrandDoesNotExists);
+                throw new KeyNotFoundException(ResponseMessages.Brand_BrandDoesNotExists);
             }
             return _mapper.Map<BrandDto>(brand);
         }
@@ -89,7 +89,7 @@ namespace Application.Services
         {
             var brand = await _brandRepository.GetBrandByIdAsync(id);
             if (brand == null) {
-                throw new AppException(ResponseMessages.Brand_BrandDoesNotExists);
+                throw new KeyNotFoundException(ResponseMessages.Brand_BrandDoesNotExists);
             }
             _mapper.Map(brandCreateUpdateDto,brand);
             await _brandRepository.UpdateBrandAsync(brand);

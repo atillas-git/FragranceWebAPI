@@ -21,57 +21,57 @@ namespace Application.Services
             _mapper = mapper;
         }
 
-        public async Task<CommentDto> GetCommentAsync(int id)
+        public async Task<CommentDto> GetCommentByIdAsync(int id)
         {
-            var comment = await _commentRepository.GetByIdAsync(id);
+            var comment = await _commentRepository.GetCommentByIdAsync(id);
             if (comment == null) {
-                throw new AppException(ResponseMessages.Comment_CommentDoesNotExists);
+                throw new KeyNotFoundException(ResponseMessages.Comment_CommentDoesNotExists);
             }
             return _mapper.Map<CommentDto>(comment);  // Map entity to DTO
         }
 
         public async Task<IEnumerable<CommentDto>> GetCommentsByFragranceIdAsync(int fragranceId)
         {
-            var comments = await _commentRepository.GetAllByFragranceIdAsync(fragranceId);
+            var comments = await _commentRepository.GetAllCommentsByFragranceIdAsync(fragranceId);
             return _mapper.Map<IEnumerable<CommentDto>>(comments);  // Map entities to DTOs
         }
 
         public async Task<IEnumerable<CommentDto>> GetCommentsByUserIdAsync(int userId)
         {
-            var comments = await _commentRepository.GetAllByUserIdAsync(userId);
+            var comments = await _commentRepository.GetAllCommentsByUserIdAsync(userId);
             return _mapper.Map<IEnumerable<CommentDto>>(comments);  // Map entities to DTOs
         }
 
         public async Task AddCommentAsync(CommentCreateUpdateDto commentDto)
         {
-            if(string.IsNullOrEmpty(commentDto.Content) || commentDto.UserId == 0 || commentDto.FragranceId == 0)
+            if(string.IsNullOrEmpty(commentDto.Content) || commentDto.UserId == null || commentDto.FragranceId == null)
             {
                 throw new AppException(ResponseMessages.Shared_PleaseFillTheRequiredFields);
             }
             var comment = _mapper.Map<Comment>(commentDto);  // Map DTO to entity
-            await _commentRepository.AddAsync(comment);
+            await _commentRepository.AddCommentAsync(comment);
         }
 
         public async Task UpdateCommentAsync(int id, CommentCreateUpdateDto commentDto)
         {
-            var comment = await _commentRepository.GetByIdAsync(id);
+            var comment = await _commentRepository.GetCommentByIdAsync(id);
             if (comment == null)
             {
-                throw new AppException(ResponseMessages.Comment_CommentDoesNotExists);
+                throw new KeyNotFoundException(ResponseMessages.Comment_CommentDoesNotExists);
             };
 
             _mapper.Map(commentDto, comment);  // Map updated DTO to existing entity
-            await _commentRepository.UpdateAsync(comment);
+            await _commentRepository.UpdateCommentAsync(comment);
         }
 
         public async Task DeleteCommentAsync(int id)
         {
-            var comment = await _commentRepository.GetByIdAsync(id);
+            var comment = await _commentRepository.GetCommentByIdAsync(id);
             if (comment == null)
             {
-                throw new AppException(ResponseMessages.Comment_CommentDoesNotExists);
+                throw new KeyNotFoundException(ResponseMessages.Comment_CommentDoesNotExists);
             }
-            await _commentRepository.DeleteAsync(comment);
+            await _commentRepository.DeleteCommentAsync(comment);
         }
     }
 }

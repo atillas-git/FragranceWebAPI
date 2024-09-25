@@ -11,6 +11,7 @@ namespace Application.Dtos.Creator
     {
         public int? Id { get; set; }
         public string? Name { get; set; }
+        public string? PictureUrl { get; set; }
         public IEnumerable<ArticleDto>? RelatedArticles { get; set; }
     }
 }

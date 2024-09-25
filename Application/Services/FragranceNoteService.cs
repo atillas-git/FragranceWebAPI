@@ -21,18 +21,18 @@ namespace Application.Services
             _mapper = mapper;
         }
 
-        public async Task<FragranceNoteDto> GetFragranceNoteAsync(int id)
+        public async Task<FragranceNoteDto> GetFragranceNoteByIdAsync(int id)
         {
-            var fragranceNote = await _fragranceNoteRepository.GetByIdAsync(id);
+            var fragranceNote = await _fragranceNoteRepository.GetFragranceNoteByIdAsync(id);
             if (fragranceNote == null) {
-                throw new AppException(ResponseMessages.FragranceNote_FragranceNoteAlreadyExist);
+                throw new KeyNotFoundException(ResponseMessages.FragranceNote_FragranceNoteDoesNotExist);
             }
             return _mapper.Map<FragranceNoteDto>(fragranceNote);  // Use AutoMapper to map entity to DTO
         }
 
         public async Task<IEnumerable<FragranceNoteDto>> GetAllFragranceNotesAsync()
         {
-            var fragranceNotes = await _fragranceNoteRepository.GetAllAsync();
+            var fragranceNotes = await _fragranceNoteRepository.GetAllFragranceNotesAsync();
             return _mapper.Map<IEnumerable<FragranceNoteDto>>(fragranceNotes);  // Use AutoMapper to map entities to DTOs
         }
 
@@ -43,33 +43,33 @@ namespace Application.Services
                 throw new AppException(ResponseMessages.Shared_PleaseFillTheRequiredFields);
             }
             var fragranceNote = _mapper.Map<FragranceNote>(fragranceNoteDto);  // Map DTO to entity
-            await _fragranceNoteRepository.AddAsync(fragranceNote);
+            await _fragranceNoteRepository.AddFragranceNoteAsync(fragranceNote);
         }
 
         public async Task UpdateFragranceNoteAsync(int id, FragranceNoteCreateUpdateDto fragranceNoteDto)
         {
-            var fragranceNote = await _fragranceNoteRepository.GetByIdAsync(id);
+            var fragranceNote = await _fragranceNoteRepository.GetFragranceNoteByIdAsync(id);
             if (fragranceNote == null)
             {
-                throw new AppException(ResponseMessages.FragranceNote_FragranceNoteAlreadyExist);    
+                throw new KeyNotFoundException(ResponseMessages.FragranceNote_FragranceNoteDoesNotExist);    
             }
             _mapper.Map(fragranceNoteDto, fragranceNote);  // Map updated DTO to existing entity
-            await _fragranceNoteRepository.UpdateAsync(fragranceNote);
+            await _fragranceNoteRepository.UpdateFragranceNoteAsync(fragranceNote);
         }
 
         public async Task DeleteFragranceNoteAsync(int id)
         {
-            var fragranceNote = await _fragranceNoteRepository.GetByIdAsync(id);
+            var fragranceNote = await _fragranceNoteRepository.GetFragranceNoteByIdAsync(id);
             if (fragranceNote == null)
             {
-                throw new AppException(ResponseMessages.FragranceNote_FragranceNoteAlreadyExist);
+                throw new KeyNotFoundException(ResponseMessages.FragranceNote_FragranceNoteDoesNotExist);
             }
-            await _fragranceNoteRepository.DeleteAsync(fragranceNote);
+            await _fragranceNoteRepository.DeleteFragranceNoteAsync(fragranceNote);
         }
 
-        public async Task<IEnumerable<FragranceNoteDto>> SearchAsync(string query, int pageNumber, int pageSize)
+        public async Task<IEnumerable<FragranceNoteDto>> SearchFragranceNotesAsync(string query, int pageNumber, int pageSize)
         {
-            var fragranceNotes = await _fragranceNoteRepository.SearchAsync(query,pageNumber,pageSize);
+            var fragranceNotes = await _fragranceNoteRepository.SearchFragranceNotesAsync(query,pageNumber,pageSize);
             return _mapper.Map<IEnumerable<FragranceNoteDto>>(fragranceNotes);
         }
     }

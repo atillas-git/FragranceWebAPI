@@ -20,7 +20,8 @@ namespace Application.Mappings
                 .ForMember(dest => dest.OverallRating, opt => opt.MapFrom(src => src.OverallRating))
                 .ForMember(dest => dest.PriceRating, opt => opt.MapFrom(src => src.PriceRating))
                 .ForMember(dest => dest.FemininityRating, opt => opt.MapFrom(src => src.FemininityRating))
-                .ForMember(dest => dest.MasculinityRating, opt => opt.MapFrom(src => src.MasculinityRating));
+                .ForMember(dest => dest.MasculinityRating, opt => opt.MapFrom(src => src.MasculinityRating))
+                .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
         }
     }
 }

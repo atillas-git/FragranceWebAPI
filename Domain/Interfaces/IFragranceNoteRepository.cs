@@ -6,12 +6,12 @@ namespace Domain.Interfaces
 {
     public interface IFragranceNoteRepository
     {
-        Task<FragranceNote> GetByIdAsync(int id);
-        Task<IEnumerable<FragranceNote>> GetAllAsync();
-        Task AddAsync(FragranceNote fragranceNote);
-        Task UpdateAsync(FragranceNote fragranceNote);
-        Task DeleteAsync(FragranceNote fragranceNote);
-        Task<IEnumerable<FragranceNote>> SearchAsync(string query, int pageNumber,int pageSize);
+        Task<FragranceNote> GetFragranceNoteByIdAsync(int id);
+        Task<IEnumerable<FragranceNote>> GetAllFragranceNotesAsync();
+        Task AddFragranceNoteAsync(FragranceNote fragranceNote);
+        Task UpdateFragranceNoteAsync(FragranceNote fragranceNote);
+        Task DeleteFragranceNoteAsync(FragranceNote fragranceNote);
+        Task<IEnumerable<FragranceNote>> SearchFragranceNotesAsync(string query, int pageNumber,int pageSize);
     }
 }
 

@@ -63,9 +63,6 @@ namespace Infastructure.Repositories
         {
             var fragrancesQuery = _context.Fragrances
                 .Include(f => f.FragranceCreators)
-                .Include(f => f.FragranceFragranceNotes)
-                .Include(f => f.Ratings)
-                .Include(f => f.Comments)
                 .Include(f=>f.Brand)
                 .AsNoTracking();
 
@@ -89,6 +86,11 @@ namespace Infastructure.Repositories
             return fragrances;
         }
 
+        public async Task<IEnumerable<Fragrance>> GetFragrancesByBrandId(int id)
+        {
+            var fragrances = await _context.Fragrances.Where(f => f.BrandId == id).ToListAsync();
+            return fragrances;
+        }
     }
 
 }

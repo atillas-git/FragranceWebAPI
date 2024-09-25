@@ -24,7 +24,7 @@ namespace Infastructure.Repositories
                 _context = context;
             }
 
-            public async Task<Creator> GetByIdAsync(int id)
+            public async Task<Creator> GetCreatorByIdAsync(int id)
             {
                 return await _context.Creators
                     .Include(c => c.FragranceCreators)
@@ -33,40 +33,46 @@ namespace Infastructure.Repositories
                     .FirstOrDefaultAsync(c => c.Id == id);
             }
 
-            public async Task<IEnumerable<Creator>> GetAllAsync()
+            public async Task<IEnumerable<Creator>> GetAllCreatorsAsync()
             {
                 return await _context.Creators
                     .Include(c => c.FragranceCreators)
-                    .ThenInclude(fc => fc.Fragrance)
                     .ToListAsync();
             }
 
-            public async Task AddAsync(Creator creator)
+            public async Task AddCreatorAsync(Creator creator)
             {
                 await _context.Creators.AddAsync(creator);
                 await _context.SaveChangesAsync();
             }
 
-            public async Task UpdateAsync(Creator creator)
+            public async Task UpdateCreatorAsync(Creator creator)
             {
                 _context.Creators.Update(creator);
                 await _context.SaveChangesAsync();
             }
 
-            public async Task DeleteAsync(Creator creator)
+            public async Task DeleteCreatorAsync(Creator creator)
             {
                 _context.Creators.Remove(creator);
                 await _context.SaveChangesAsync();
             }
 
-            public async Task<IEnumerable<Creator>> SearchAsync(string query, int pageNumber = 1, int pageSize = 10)
+            public async Task<IEnumerable<Creator>> SearchCreatorsAsync(string query, int pageNumber = 1, int pageSize = 10)
             {
-                var creators = await _context.Creators
-                    .Where(c=>c.Name.Contains(query,StringComparison.OrdinalIgnoreCase))
+                var creatorSearchQuery = _context.Creators;
+                if (!string.IsNullOrEmpty(query))
+                {
+                    var queryLower = query.ToLower();
+                    creatorSearchQuery.Where(c => c.Name.ToLower().Contains(query));
+
+                }
+                var creators = await creatorSearchQuery
                     .Skip((pageNumber - 1) * pageSize)
                     .Take(pageSize)
                     .AsNoTracking()
                     .ToListAsync();
+
                 return creators;
             }
         }

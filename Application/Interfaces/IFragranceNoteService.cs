@@ -6,12 +6,12 @@ namespace Application.Interfaces
 {
     public interface IFragranceNoteService
     {
-        Task<FragranceNoteDto> GetFragranceNoteAsync(int id);  // Retrieve a single fragrance note by ID
+        Task<FragranceNoteDto> GetFragranceNoteByIdAsync(int id);  // Retrieve a single fragrance note by ID
         Task<IEnumerable<FragranceNoteDto>> GetAllFragranceNotesAsync();  // Retrieve all fragrance notes
         Task AddFragranceNoteAsync(FragranceNoteCreateUpdateDto fragranceNoteDto);  // Add a new fragrance note
         Task UpdateFragranceNoteAsync(int id, FragranceNoteCreateUpdateDto fragranceNoteDto);  // Update an existing fragrance note
         Task DeleteFragranceNoteAsync(int id);  // Delete a fragrance note
-        Task<IEnumerable<FragranceNoteDto>> SearchAsync(string query, int pageNumber, int pageSize);
+        Task<IEnumerable<FragranceNoteDto>> SearchFragranceNotesAsync(string query, int pageNumber, int pageSize);
     }
 }
 

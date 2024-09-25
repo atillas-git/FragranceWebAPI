@@ -6,7 +6,7 @@ namespace Application.Interfaces
 {
     public interface IUserService
     {
-        Task<UserDto> GetUserAsync(int id);  // Retrieve a single user by ID
+        Task<UserDto> GetUserByIdAsync(int id);  // Retrieve a single user by ID
         Task<UserDto> GetUserByEmailAsync(string email);  // Retrieve user by email
         Task<IEnumerable<UserDto>> GetAllUsersAsync();  // Retrieve all users
         Task AddUserAsync(UserCreateUpdateDto userDto);  // Add a new user

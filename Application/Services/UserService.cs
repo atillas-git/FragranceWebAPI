@@ -22,28 +22,28 @@ namespace Application.Services
             _mapper = mapper;
         }
 
-        public async Task<UserDto> GetUserAsync(int id)
+        public async Task<UserDto> GetUserByIdAsync(int id)
         {
-            var user = await _userRepository.GetByIdAsync(id);
+            var user = await _userRepository.GetUserByIdAsync(id);
             if (user == null) {
-                throw new AppException(ResponseMessages.User_UserDoesNotExist);
+                throw new KeyNotFoundException(ResponseMessages.User_UserDoesNotExist);
             }
             return _mapper.Map<UserDto>(user);  // Use AutoMapper to map entity to DTO
         }
 
         public async Task<UserDto> GetUserByEmailAsync(string email)
         {
-            var user = await _userRepository.GetByEmailAsync(email);
+            var user = await _userRepository.GetUserByEmailAsync(email);
             if (user == null)
             {
-                throw new AppException(ResponseMessages.User_UserDoesNotExist);
+                throw new KeyNotFoundException(ResponseMessages.User_UserDoesNotExist);
             }
             return _mapper.Map<UserDto>(user);  // Map entity to DTO
         }
 
         public async Task<IEnumerable<UserDto>> GetAllUsersAsync()
         {
-            var users = await _userRepository.GetAllAsync();
+            var users = await _userRepository.GetAllUsersAsync();
             return _mapper.Map<IEnumerable<UserDto>>(users);
         }
 
@@ -59,16 +59,16 @@ namespace Application.Services
                 var hashedPassword = HashPassword(userDto.Password);
                 user.PasswordHash = hashedPassword;
             }
-            await _userRepository.AddAsync(user);
+            await _userRepository.AddUserAsync(user);
         }
 
         public async Task UpdateUserAsync(int id, UserCreateUpdateDto userDto)
         {
-            var user = await _userRepository.GetByIdAsync(id);
+            var user = await _userRepository.GetUserByIdAsync(id);
 
             if (user == null)
             {
-                throw new AppException(ResponseMessages.User_UserDoesNotExist);
+                throw new KeyNotFoundException(ResponseMessages.User_UserDoesNotExist);
             }
             _mapper.Map(userDto, user);
             if (!string.IsNullOrEmpty(userDto.Password))
@@ -76,22 +76,22 @@ namespace Application.Services
                 user.PasswordHash = HashPassword(userDto.Password);
             }
 
-            await _userRepository.UpdateAsync(user);
+            await _userRepository.UpdateUserAsync(user);
         }
 
         public async Task DeleteUserAsync(int id)
         {
-            var user = await _userRepository.GetByIdAsync(id);
+            var user = await _userRepository.GetUserByIdAsync(id);
             if (user == null)
             {
-                throw new AppException(ResponseMessages.User_UserDoesNotExist);
+                throw new KeyNotFoundException(ResponseMessages.User_UserDoesNotExist);
             }
-            await _userRepository.DeleteAsync(user);
+            await _userRepository.DeleteUserAsync(user);
         }
 
         public async Task<IEnumerable<UserDto>> GetByNameAsync(string name)
         {
-            var users = await _userRepository.GetByNameAsync(name);
+            var users = await _userRepository.GetUsersByNameAsync(name);
             return _mapper.Map<IEnumerable<UserDto>>(users);
         }
     }

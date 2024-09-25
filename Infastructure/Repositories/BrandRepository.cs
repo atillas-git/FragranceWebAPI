@@ -54,8 +54,7 @@ namespace Infastructure.Repositories
 
         public async Task<IEnumerable<Brand>> SearchBrandAsync(string query, int pageNumber = 1, int pageSize = 10)
         {
-            var brandsQuery = _context.Brands.Include(b => b.Fragrances)
-                .Include(b => b.RelatedArticles)
+            var brandsQuery = _context.Brands
                 .AsNoTracking();
 
             if (!string.IsNullOrWhiteSpace(query))

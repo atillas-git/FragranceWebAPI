@@ -21,53 +21,58 @@ namespace Application.Services
             _mapper = mapper;
         }
 
-        public async Task<RatingDto> GetRatingAsync(int id)
+        public async Task<RatingDto> GetRatingByIdAsync(int id)
         {
-            var rating = await _ratingRepository.GetByIdAsync(id);
+            var rating = await _ratingRepository.GetRatingByIdAsync(id);
             if (rating == null) { 
-                throw new AppException(ResponseMessages.Rating_RatingDoesNotExist);
+                throw new KeyNotFoundException(ResponseMessages.Rating_RatingDoesNotExist);
             }
             return _mapper.Map<RatingDto>(rating);  // Use AutoMapper to map entity to DTO
         }
 
         public async Task<IEnumerable<RatingDto>> GetRatingsByFragranceIdAsync(int fragranceId)
         {
-            var ratings = await _ratingRepository.GetAllByFragranceIdAsync(fragranceId);
+            var ratings = await _ratingRepository.GetAllRatingsByFragranceIdAsync(fragranceId);
             return _mapper.Map<IEnumerable<RatingDto>>(ratings);
         }
 
         public async Task<IEnumerable<RatingDto>> GetRatingsByUserIdAsync(int userId)
         {
-            var ratings = await _ratingRepository.GetAllByUserIdAsync(userId);
+            var ratings = await _ratingRepository.GetAllRatingsByUserIdAsync(userId);
             return _mapper.Map<IEnumerable<RatingDto>>(ratings);
         }
 
         public async Task AddRatingAsync(RatingCreateUpdateDto ratingDto)
         {
+            if (ratingDto == null || ratingDto.MasculinityRating == null || ratingDto.OverallRating == null
+                || ratingDto.FemininityRating == null || ratingDto.PriceRating == null || ratingDto.UserId == null
+                || ratingDto.FragranceId == null) { 
+                throw new AppException(ResponseMessages.Shared_PleaseFillTheRequiredFields);
+            }
             var rating = _mapper.Map<Rating>(ratingDto);  // Map DTO to entity
-            await _ratingRepository.AddAsync(rating);
+            await _ratingRepository.AddRatingAsync(rating);
         }
 
         public async Task UpdateRatingAsync(int id, RatingCreateUpdateDto ratingDto)
         {
-            var rating = await _ratingRepository.GetByIdAsync(id);
+            var rating = await _ratingRepository.GetRatingByIdAsync(id);
             if (rating == null)
             {
-                throw new AppException(ResponseMessages.Rating_RatingDoesNotExist);
+                throw new KeyNotFoundException(ResponseMessages.Rating_RatingDoesNotExist);
             }
 
             _mapper.Map(ratingDto, rating);  // Map updated DTO to existing entity
-            await _ratingRepository.UpdateAsync(rating);
+            await _ratingRepository.UpdateRatingAsync(rating);
         }
 
         public async Task DeleteRatingAsync(int id)
         {
-            var rating = await _ratingRepository.GetByIdAsync(id);
+            var rating = await _ratingRepository.GetRatingByIdAsync(id);
             if (rating == null)
             {
-                throw new AppException(ResponseMessages.Rating_RatingDoesNotExist);
+                throw new KeyNotFoundException(ResponseMessages.Rating_RatingDoesNotExist);
             }
-            await _ratingRepository.DeleteAsync(rating);
+            await _ratingRepository.DeleteRatingAsync(rating);
         }
     }
 }

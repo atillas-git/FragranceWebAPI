@@ -17,7 +17,7 @@ namespace Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<Comment> GetByIdAsync(int id)
+        public async Task<Comment> GetCommentByIdAsync(int id)
         {
             return await _context.Comments
                 .Include(c => c.User)
@@ -26,7 +26,7 @@ namespace Infrastructure.Repositories
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
 
-        public async Task<IEnumerable<Comment>> GetAllByFragranceIdAsync(int fragranceId)
+        public async Task<IEnumerable<Comment>> GetAllCommentsByFragranceIdAsync(int fragranceId)
         {
             return await _context.Comments
                 .Where(c => c.FragranceId == fragranceId)
@@ -35,7 +35,7 @@ namespace Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Comment>> GetAllByUserIdAsync(int userId)
+        public async Task<IEnumerable<Comment>> GetAllCommentsByUserIdAsync(int userId)
         {
             return await _context.Comments
                 .Where(c => c.UserId == userId)
@@ -44,22 +44,27 @@ namespace Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task AddAsync(Comment comment)
+        public async Task AddCommentAsync(Comment comment)
         {
             await _context.Comments.AddAsync(comment);
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(Comment comment)
+        public async Task UpdateCommentAsync(Comment comment)
         {
             _context.Comments.Update(comment);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(Comment comment)
+        public async Task DeleteCommentAsync(Comment comment)
         {
             _context.Comments.Remove(comment);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<Comment>> GetAllCommentsAsync()
+        {
+            return await _context.Comments.ToListAsync();
         }
     }
 }

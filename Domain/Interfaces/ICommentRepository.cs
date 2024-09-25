@@ -6,12 +6,13 @@ namespace Domain.Interfaces
 {
     public interface ICommentRepository
     {
-        Task<Comment> GetByIdAsync(int id);
-        Task<IEnumerable<Comment>> GetAllByFragranceIdAsync(int fragranceId);
-        Task<IEnumerable<Comment>> GetAllByUserIdAsync(int userId);
-        Task AddAsync(Comment comment);
-        Task UpdateAsync(Comment comment);
-        Task DeleteAsync(Comment comment);
+        Task<Comment> GetCommentByIdAsync(int id);
+        Task<IEnumerable<Comment>> GetAllCommentsAsync();
+        Task<IEnumerable<Comment>> GetAllCommentsByFragranceIdAsync(int fragranceId);
+        Task<IEnumerable<Comment>> GetAllCommentsByUserIdAsync(int userId);
+        Task AddCommentAsync(Comment comment);
+        Task UpdateCommentAsync(Comment comment);
+        Task DeleteCommentAsync(Comment comment);
     }
 }
 

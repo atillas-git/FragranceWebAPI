@@ -9,11 +9,11 @@ namespace Domain.Interfaces
 {
     public interface ICreatorRepository
     {
-        Task<Creator> GetByIdAsync(int id);
-        Task<IEnumerable<Creator>> GetAllAsync();
-        Task AddAsync(Creator creator);
-        Task UpdateAsync(Creator creator);
-        Task DeleteAsync(Creator creator);
-        Task<IEnumerable<Creator>> SearchAsync(string query,int pageNumber,int pageSize);
+        Task<Creator> GetCreatorByIdAsync(int id);
+        Task<IEnumerable<Creator>> GetAllCreatorsAsync();
+        Task AddCreatorAsync(Creator creator);
+        Task UpdateCreatorAsync(Creator creator);
+        Task DeleteCreatorAsync(Creator creator);
+        Task<IEnumerable<Creator>> SearchCreatorsAsync(string query,int pageNumber,int pageSize);
     }
 }

@@ -17,7 +17,7 @@ namespace Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<Rating> GetByIdAsync(int id)
+        public async Task<Rating> GetRatingByIdAsync(int id)
         {
             return await _context.Ratings
                 .Include(r => r.User)
@@ -26,7 +26,7 @@ namespace Infrastructure.Repositories
                 .FirstOrDefaultAsync(r => r.Id == id);
         }
 
-        public async Task<IEnumerable<Rating>> GetAllByFragranceIdAsync(int fragranceId)
+        public async Task<IEnumerable<Rating>> GetAllRatingsByFragranceIdAsync(int fragranceId)
         {
             return await _context.Ratings
                 .Where(r => r.FragranceId == fragranceId)
@@ -34,7 +34,7 @@ namespace Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Rating>> GetAllByUserIdAsync(int userId)
+        public async Task<IEnumerable<Rating>> GetAllRatingsByUserIdAsync(int userId)
         {
             return await _context.Ratings
                 .Where(r => r.UserId == userId)
@@ -42,19 +42,19 @@ namespace Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task AddAsync(Rating rating)
+        public async Task AddRatingAsync(Rating rating)
         {
             await _context.Ratings.AddAsync(rating);
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(Rating rating)
+        public async Task UpdateRatingAsync(Rating rating)
         {
             _context.Ratings.Update(rating);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(Rating rating)
+        public async Task DeleteRatingAsync(Rating rating)
         {
             _context.Ratings.Remove(rating);
             await _context.SaveChangesAsync();

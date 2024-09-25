@@ -15,10 +15,11 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Add Db Context
 builder.Services.AddDbContext<FragranceDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Register Repositories
 builder.Services.AddScoped<IFragranceRepository, FragranceRepository>();
 builder.Services.AddScoped<ICreatorRepository, CreatorRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
@@ -49,10 +50,10 @@ builder.Services
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = true, // Validate the token's issuer
-            ValidateAudience = true, // Ensure the token's audience matches
-            ValidateLifetime = true, // Validate the token's expiration
-            ValidateIssuerSigningKey = true, // Ensure the token's signing key is valid
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
@@ -60,13 +61,9 @@ builder.Services
     });
 
 
-//Cors
-
-var AllowFrontEnd = "_allowFrontend";
-
-var allowedOrigins = builder.Configuration["AllowedOrigins"].Split(';').ToList();
-
 // Configure CORS with options based on environment
+var AllowFrontEnd = "_allowFrontend";
+var allowedOrigins = builder.Configuration["AllowedOrigins"].Split(';').ToList();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(AllowFrontEnd, policy =>
@@ -87,17 +84,20 @@ builder.Services.AddCors(options =>
     });
 });
 
+//Add AutoMapper
 builder.Services.AddAutoMapper(typeof(FragranceMappingProfile), typeof(CreatorMappingProfile), typeof(FragranceNoteMappingProfile), 
     typeof(RatingMappingProfile), typeof(CommentMappingProfile), typeof(UserMappingProfile),typeof(ArticleMappingProfile),
     typeof(BrandMappingProfile),typeof(ForumMappingProfile));
 
+
+//Set Json Property Naming Policy
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.PropertyNamingPolicy = null;
     });
 
-
+// Add SwaggerUI Authorization
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -128,6 +128,7 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+//Add Role Based Authorization
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));

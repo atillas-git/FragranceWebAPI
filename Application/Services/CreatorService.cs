@@ -21,18 +21,18 @@ namespace Application.Services
             _mapper = mapper;
         }
 
-        public async Task<CreatorDto> GetCreatorAsync(int id)
+        public async Task<CreatorDto> GetCreatorByIdAsync(int id)
         {
-            var creator = await _creatorRepository.GetByIdAsync(id);
+            var creator = await _creatorRepository.GetCreatorByIdAsync(id);
             if (creator == null) {
-                throw new AppException(ResponseMessages.Creator_CreatorDoesNotExist);
+                throw new KeyNotFoundException(ResponseMessages.Creator_CreatorDoesNotExist);
             }
             return _mapper.Map<CreatorDto>(creator);  // Use AutoMapper to map entity to DTO
         }
 
         public async Task<IEnumerable<CreatorDto>> GetAllCreatorsAsync()
         {
-            var creators = await _creatorRepository.GetAllAsync();
+            var creators = await _creatorRepository.GetAllCreatorsAsync();
             return _mapper.Map<IEnumerable<CreatorDto>>(creators);  // Use AutoMapper to map entities to DTOs
         }
 
@@ -43,33 +43,33 @@ namespace Application.Services
                 throw new AppException(ResponseMessages.Shared_PleaseFillTheRequiredFields);
             }
             var creator = _mapper.Map<Creator>(creatorDto);
-            await _creatorRepository.AddAsync(creator);
+            await _creatorRepository.AddCreatorAsync(creator);
         }
 
         public async Task UpdateCreatorAsync(int id, CreatorCreateUpdateDto creatorDto)
         {
-            var creator = await _creatorRepository.GetByIdAsync(id);
+            var creator = await _creatorRepository.GetCreatorByIdAsync(id);
             if (creator == null)
             {
-                throw new AppException(ResponseMessages.Creator_CreatorDoesNotExist);
+                throw new KeyNotFoundException(ResponseMessages.Creator_CreatorDoesNotExist);
             }
             _mapper.Map(creatorDto, creator);  // Map updated DTO to existing entity
-            await _creatorRepository.UpdateAsync(creator);
+            await _creatorRepository.UpdateCreatorAsync(creator);
         }
 
         public async Task DeleteCreatorAsync(int id)
         {
-            var creator = await _creatorRepository.GetByIdAsync(id);
+            var creator = await _creatorRepository.GetCreatorByIdAsync(id);
             if (creator == null)
             {
-                throw new AppException(ResponseMessages.Creator_CreatorDoesNotExist);
+                throw new KeyNotFoundException(ResponseMessages.Creator_CreatorDoesNotExist);
             }
-            await _creatorRepository.DeleteAsync(creator);
+            await _creatorRepository.DeleteCreatorAsync(creator);
         }
 
-        public async Task<IEnumerable<CreatorDto>> SearchAsync(string query, int pageNumber, int pageSize)
+        public async Task<IEnumerable<CreatorDto>> SearchCreatorsAsync(string query, int pageNumber, int pageSize)
         {
-            var creators = await  _creatorRepository.SearchAsync(query, pageNumber, pageSize);
+            var creators = await  _creatorRepository.SearchCreatorsAsync(query, pageNumber, pageSize);
             return _mapper.Map<IEnumerable<CreatorDto>>(creators);
         }
     }

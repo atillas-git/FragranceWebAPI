@@ -22,12 +22,12 @@ namespace Application.Services
             _mapper = mapper;
         }
 
-        public async Task<FragranceDto> GetFragranceAsync(int id)
+        public async Task<FragranceDto> GetFragranceByIdAsync(int id)
         {
             var fragrance = await _fragranceRepository.GetFragranceByIdAsync(id);
 
             if (fragrance == null) {
-                throw new AppException(ResponseMessages.Fragrance_FragranceDoesNotExists);
+                throw new KeyNotFoundException(ResponseMessages.Fragrance_FragranceDoesNotExists);
             }
 
             return _mapper.Map<FragranceDto>(fragrance);
@@ -56,7 +56,7 @@ namespace Application.Services
             var fragrance = await _fragranceRepository.GetFragranceByIdAsync(id);
             if (fragrance == null)
             {
-                throw new AppException(ResponseMessages.Fragrance_FragranceDoesNotExists);
+                throw new KeyNotFoundException(ResponseMessages.Fragrance_FragranceDoesNotExists);
             };
             _mapper.Map(fragranceDto, fragrance);
             await _fragranceRepository.UpdateFragranceAsync(fragrance);
@@ -67,7 +67,7 @@ namespace Application.Services
             var fragrance = await _fragranceRepository.GetFragranceByIdAsync(id);
             if(fragrance == null)
             {
-                throw new AppException(ResponseMessages.Fragrance_FragranceDoesNotExists);
+                throw new KeyNotFoundException(ResponseMessages.Fragrance_FragranceDoesNotExists);
             };
             await _fragranceRepository.DeleteFragranceAsync(fragrance);
         }
@@ -77,6 +77,12 @@ namespace Application.Services
             var fragrances = await _fragranceRepository.SearchFragranceAsync(query,pageNumber,pageSize);
             var fragranceDtos = _mapper.Map<IEnumerable<FragranceDto>>(fragrances);
             return fragranceDtos;
+        }
+
+        public async Task<IEnumerable<FragranceDto>> GetFragrancesByBrandId(int id)
+        {
+            var fragrances = await _fragranceRepository.GetFragrancesByBrandId(id);
+            return _mapper.Map<IEnumerable<FragranceDto>>(fragrances);
         }
     }
 }

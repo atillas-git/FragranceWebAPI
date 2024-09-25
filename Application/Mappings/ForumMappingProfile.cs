@@ -14,14 +14,28 @@ namespace Application.Mappings
         public ForumMappingProfile()
         {
             CreateMap<Forum, ForumDto>()
-                .ForMember(dest => dest.Posts , opt => opt.MapFrom(src => src.Posts));
+                .ForMember(dest => dest.Posts , opt => opt.MapFrom(src => src.Posts != null ?
+                    src.Posts.Select(p => new ForumPostDto() { 
+                        Author = p.Author,
+                        Content = p.Content,
+                        ForumId = p.ForumId,
+                        Id = p.Id,
+                        PostedDate = p.PostedDate,
+                }):Enumerable.Empty<ForumPostDto>()));
             
-            CreateMap<ForumCreateUpdateDto, Forum>();
+            CreateMap<ForumCreateUpdateDto, Forum>()
+                .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
 
             CreateMap<ForumPost, ForumPostDto>()
-                .ForMember(dest => dest.Forum,opt => opt.MapFrom(src => src.Forum));
+                .ForMember(dest => dest.Forum,opt => opt.MapFrom(src => new ForumDto() { 
+                    Id = src.Forum.Id,
+                    Description = src.Forum.Description,
+                    CreatedDate = src.Forum.CreatedDate,
+                    Title = src.Forum.Title,
+                }));
 
-            CreateMap<ForumPostCreateUpdateDto, ForumPost>();
+            CreateMap<ForumPostCreateUpdateDto, ForumPost>()
+                .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
         }
     }
 }

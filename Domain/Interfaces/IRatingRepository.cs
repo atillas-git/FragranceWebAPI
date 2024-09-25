@@ -6,11 +6,11 @@ namespace Domain.Interfaces
 {
     public interface IRatingRepository
     {
-        Task<Rating> GetByIdAsync(int id);
-        Task<IEnumerable<Rating>> GetAllByFragranceIdAsync(int fragranceId);
-        Task<IEnumerable<Rating>> GetAllByUserIdAsync(int userId);
-        Task AddAsync(Rating rating);
-        Task UpdateAsync(Rating rating);
-        Task DeleteAsync(Rating rating);
+        Task<Rating> GetRatingByIdAsync(int id);
+        Task<IEnumerable<Rating>> GetAllRatingsByFragranceIdAsync(int fragranceId);
+        Task<IEnumerable<Rating>> GetAllRatingsByUserIdAsync(int userId);
+        Task AddRatingAsync(Rating rating);
+        Task UpdateRatingAsync(Rating rating);
+        Task DeleteRatingAsync(Rating rating);
     }
 }

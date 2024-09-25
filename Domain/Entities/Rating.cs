@@ -21,16 +21,16 @@ namespace Domain.Entities
 
         // Rating properties (Assuming scale of 1-5)
         [Range(1, 5)]
-        public int OverallRating { get; set; }
+        public float OverallRating { get; set; }
 
         [Range(1, 5)]
-        public int PriceRating { get; set; }
+        public float PriceRating { get; set; }
 
         [Range(1, 5)]
-        public int FemininityRating { get; set; }
+        public float FemininityRating { get; set; }
 
         [Range(1, 5)]
-        public int MasculinityRating { get; set; }
+        public float MasculinityRating { get; set; }
     }
 
 }

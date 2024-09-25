@@ -50,7 +50,7 @@ namespace FragranceAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetFragranceByIdAsync(int id)
         {
-            var fragrance = await _fragranceService.GetFragranceAsync(id);
+            var fragrance = await _fragranceService.GetFragranceByIdAsync(id);
             return Ok(fragrance);
         }
         [HttpGet("search")]

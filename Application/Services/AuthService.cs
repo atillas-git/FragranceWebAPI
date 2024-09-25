@@ -1,5 +1,6 @@
 ﻿using Application.Dtos.Auth;
 using Application.Interfaces;
+using Application.Messages;
 using Domain.Entities;
 using Domain.Interfaces;
 using Microsoft.Extensions.Configuration;
@@ -27,10 +28,10 @@ namespace Application.Services
         }
         public async Task<AuthResponseDto> LoginAsync(AuthRequestDto authRequest)
         {
-            var user = await _userRepository.GetByEmailAsync(authRequest.Email);
+            var user = await _userRepository.GetUserByEmailAsync(authRequest.Email);
             if(user == null || !Verify(authRequest.Password, user.PasswordHash))
             {
-                return null;
+                throw new UnauthorizedAccessException(ResponseMessages.Auth_AuthUnauthorized);
             }
 
             var token = GenerateJwtToken(user);
@@ -46,10 +47,10 @@ namespace Application.Services
 
         public async Task<bool> RegisterAsync(RegisterRequestDto registerRequest)
         {
-            var existingUser = await _userRepository.GetByEmailAsync(registerRequest.Email);
+            var existingUser = await _userRepository.GetUserByEmailAsync(registerRequest.Email);
             if(existingUser != null)
             {
-                return false;
+                throw new KeyNotFoundException(ResponseMessages.Auth_AuthUserNotFound);
             }
             var hashedPassword = HashPassword(registerRequest.Password);
 
@@ -60,7 +61,7 @@ namespace Application.Services
                 Role = "User"  // Default role
             };
 
-            await _userRepository.AddAsync(newUser);
+            await _userRepository.AddUserAsync(newUser);
 
             return true;
         }
@@ -74,8 +75,10 @@ namespace Application.Services
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim(ClaimTypes.Name, user.Id.ToString()),
-                    new Claim(ClaimTypes.Role, user.Role)
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                    new Claim(ClaimTypes.Email,user.Email),
+                    new Claim(ClaimTypes.Role, user.Role),
+                    new Claim(ClaimTypes.Name,user.Name)
                 }),
                 Expires = DateTime.UtcNow.AddDays(1),
                 Audience = _configuration["JWT:Audience"],

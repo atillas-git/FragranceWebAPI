@@ -12,7 +12,8 @@ namespace Application.Mappings
             CreateMap<FragranceNote, FragranceNoteDto>();
 
             // DTO to Entity mapping for Create/Update operations
-            CreateMap<FragranceNoteCreateUpdateDto, FragranceNote>();
+            CreateMap<FragranceNoteCreateUpdateDto, FragranceNote>()
+                .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
         }
     }
 }

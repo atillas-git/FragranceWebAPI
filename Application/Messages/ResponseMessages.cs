@@ -15,6 +15,10 @@ namespace Application.Messages
         //Shared Messages
         public static readonly string Shared_PleaseFillTheRequiredFields = "Backend.PleaseFillTheRequiredFields";
 
+        //Auth Service Messages
+        public static readonly string Auth_AuthUnauthorized = "Backend.Unauthorized";
+        public static readonly string Auth_AuthUserNotFound = "Backend.UserNotFound";
+
         // Brand Service Messages
         public static readonly string Brand_NameCountryRequired = "Backend.NameAndCountryIsRequired";
         public static readonly string Brand_BrandAlreadyExists = "Backend.BrandAlreadyExists";
@@ -43,5 +47,8 @@ namespace Application.Messages
         //User Service Messages
         public static readonly string User_UserDoesNotExist = "Backend.UserDoesNotExist";
         public static readonly string User_UserAlreadyExist = "Backend.UserAlreadyExist";
+
+        //Article Service Messsages
+        public static readonly string Article_ArticleDoesNotExist = "Backend.ArticleDoesNotExist";
     }
 }

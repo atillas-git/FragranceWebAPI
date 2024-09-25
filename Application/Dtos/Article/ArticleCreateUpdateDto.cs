@@ -12,5 +12,8 @@ namespace Application.Dtos.Article
         public string? Content { get; set; }
         public string? Author { get; set; }
         public DateTime? PublishedDate { get; set; }
+        public IEnumerable<int>? RelatedFragranceIds { get; set; }
+        public IEnumerable<int>? RelatedBrandIds { get; set; }
+        public IEnumerable<int>? RelatedCreatorIds { get; set; }
     }
 }
