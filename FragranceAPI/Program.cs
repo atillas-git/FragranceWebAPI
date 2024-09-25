@@ -27,6 +27,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IFragranceNoteRepository, FragranceNoteRepository>();
 builder.Services.AddScoped<IRatingRepository, RatingRepository>();
 builder.Services.AddScoped<IBrandRepository,BrandRepository>();
+builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
 
 // Register Services
 builder.Services.AddScoped<IFragranceService, FragranceService>();
@@ -36,6 +37,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IFragranceNoteService, FragranceNoteService>();
 builder.Services.AddScoped<IRatingService, RatingService>();
 builder.Services.AddScoped<IBrandService, BrandService>();
+builder.Services.AddScoped<IArticleService, ArticleService>();
 builder.Services.AddScoped<IAuthService,AuthService>();
 
 
